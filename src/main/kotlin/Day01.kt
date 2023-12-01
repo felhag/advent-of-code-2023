@@ -1,19 +1,11 @@
-fun main() {
-    val input = getInputs()
-    log(
-        part011a(input),
-        part011b(input)
-    )
-}
-
-private fun part011a(lines: List<String>): Int {
+fun part01a(lines: List<String>): Int {
     return lines.map { it.filter(Char::isDigit) }
         .map { it.first() to it.last() }
         .map { "" + it.first + it.second }
         .sumOf(Integer::parseInt)
 }
 
-private fun part011b(lines: List<String>): Int {
+fun part01b(lines: List<String>): Int {
     return lines
         .map { find(it, 0..it.length) + find(it, it.length - 1 downTo  0) }
         .sumOf(Integer::parseInt)
