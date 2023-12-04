@@ -6,34 +6,21 @@ fun part01a(lines: List<String>): Int {
 }
 
 fun part01b(lines: List<String>): Int {
-    return lines
-        .map { find(it, 0..it.length) + find(it, it.length - 1 downTo  0) }
-        .sumOf(Integer::parseInt)
+    return lines.map { find(it, 0..it.length) + find(it, it.length - 1 downTo  0) }.sumOf(Integer::parseInt)
 }
 
 fun find(line: String, intRange: IntProgression): String {
-    for (idx in intRange) {
-        val first = findNumber(line, idx, intRange.first > intRange.last)
-        if (first != null) {
-            return first.toString()
-        }
-    }
-    return ""
+    return intRange.iterator().asSequence().firstNotNullOf { findNumber(line, it, intRange.first > intRange.last) }
 }
 
 val numbers = listOf("zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine")
-private fun findNumber(line: String, idx: Int, last: Boolean): Int? {
-    val c = line[idx]
-    if (c.isDigit()) {
-        return c.digitToInt()
-    }
-    val first = numbers.firstOrLast(last) { idx + it.length <= line.length && it == line.substring(idx, idx + it.length) }
-    if (first != null) {
-        return numbers.indexOf(first)
-    }
-    return null
+private fun findNumber(line: String, idx: Int, last: Boolean): String? {
+    if (line[idx].isDigit()) return line[idx].toString()
+    return numbers.findNumber(last, line, idx)
 }
 
-private fun <T> Iterable<T>.firstOrLast(last: Boolean, pred: (T) -> Boolean): T? {
-    return if (last) lastOrNull(pred) else firstOrNull(pred)
+private fun Iterable<String>.findNumber(last: Boolean, line: String, idx: Int): String? {
+    val pred = { s: String -> idx + s.length <= line.length && s == line.substring(idx, idx + s.length) };
+    val result = if (last) lastOrNull(pred) else firstOrNull(pred)
+    return if (result != null) indexOf(result).toString() else null
 }
