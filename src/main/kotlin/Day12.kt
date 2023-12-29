@@ -17,7 +17,7 @@ fun part12b(lines: List<String>): Long {
     }
 }
 
-var cache = mutableMapOf<Pair<String, List<Int>>, Long>()
+private var cache = mutableMapOf<Pair<String, List<Int>>, Long>()
 private fun iterate(springs: String, instructions: List<Int>): Long {
     if (instructions.isEmpty()) {
         return if (springs.none{ it.isDamaged()}) 1 else 0
